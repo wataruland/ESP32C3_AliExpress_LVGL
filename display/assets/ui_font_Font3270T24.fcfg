@@ -1,0 +1,16 @@
+{
+  "codename": "Font3270T24",
+  "ttf_path": "\\assets\\3270 Narrow Nerd Font Complete.ttf",
+  "bin_path": "\\assets\\ui_font_Font3270T24.bin",
+  "c_path": "\\assets\\ui_font_Font3270T24.c",
+  "cfg_path": "\\assets\\ui_font_Font3270T24.fcfg",
+  "size": 24,
+  "bpp": 1,
+  "letters": 0,
+  "ranges": [
+    "0x20-0x7f"
+  ],
+  "symbols": "",
+  "customparams": "--no-compress --no-prefilter",
+  "uploaded": false
+}
