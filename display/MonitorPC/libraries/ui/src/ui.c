@@ -42,6 +42,23 @@ lv_obj_t * ui_GPULabelVent1;
 lv_obj_t * ui_GPULabelLoad;
 lv_obj_t * ui_GPULabelLoadText;
 lv_obj_t * ui_GPUPanelTouch;
+
+
+// SCREEN: ui_ScreenTime
+void ui_ScreenTime_screen_init(void);
+void ui_event_ScreenTime(lv_event_t * e);
+lv_obj_t * ui_ScreenTime;
+lv_obj_t * ui_TimeImageFondo;
+lv_obj_t * ui_LabelTime;
+lv_obj_t * ui_LabelDate;
+
+
+// SCREEN: ui_ScreenCPUHist
+void ui_ScreenCPUHist_screen_init(void);
+void ui_event_ScreenCPUHist(lv_event_t * e);
+lv_obj_t * ui_ScreenCPUHist;
+lv_obj_t * ui_CPUHistImageFondo;
+lv_obj_t * ui_ChartCPU;
 lv_obj_t * ui____initial_actions0;
 const lv_img_dsc_t * ui_imgset_z[1] = {&ui_img_z2_png};
 
@@ -64,6 +81,14 @@ void ui_event_ScreenCPU(lv_event_t * e)
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_ScreenGPU, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_ScreenGPU_screen_init);
     }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_ScreenTime, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_ScreenTime_screen_init);
+    }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_ScreenCPUHist, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_ScreenCPUHist_screen_init);
+    }
 }
 void ui_event_ScreenGPU(lv_event_t * e)
 {
@@ -83,6 +108,24 @@ void ui_event_GPUArcTemp(lv_event_t * e)
         _ui_screen_change(&ui_ScreenCPU, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_ScreenCPU_screen_init);
     }
 }
+void ui_event_ScreenTime(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_ScreenCPU, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_ScreenCPU_screen_init);
+    }
+}
+void ui_event_ScreenCPUHist(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_BOTTOM) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_ScreenCPU, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_ScreenCPU_screen_init);
+    }
+}
 
 ///////////////////// SCREENS ////////////////////
 
@@ -94,6 +137,8 @@ void ui_init(void)
     lv_disp_set_theme(dispp, theme);
     ui_ScreenCPU_screen_init();
     ui_ScreenGPU_screen_init();
+    ui_ScreenTime_screen_init();
+    ui_ScreenCPUHist_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_ScreenCPU);
 }

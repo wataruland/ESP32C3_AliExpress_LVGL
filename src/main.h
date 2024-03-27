@@ -21,6 +21,7 @@ void estilos(void);
 int active_screen(void);
 void cpu_screen(void);
 void gpu_screen(void);
+void time_screen(void);
 
 
 static lv_disp_draw_buf_t draw_buf;

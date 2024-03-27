@@ -135,7 +135,9 @@ void loop()
 
   if (changedataTime)
   {
-    // Pintar reloj 
+    // Pintar reloj
+    int ScreenID = active_screen();
+    if (ScreenID == 1) time_screen(); 
     changedataTime = false;
   }
 
@@ -145,9 +147,15 @@ void loop()
 
     switch (ScreenID)
     {
+      case 1: /* Time */
+        time_screen();
+        break;      
       case 10: /* CPU Basic */
         cpu_screen();
         break;
+      case 11: /* CPU Hist */
+        //cpu_screen();
+        break;        
       case 20: /* GPU Basic */
         gpu_screen();
         break;        
@@ -307,7 +315,9 @@ int active_screen(void)
     int ScreenID = -1;
 
     lv_obj_t * s = lv_scr_act(); //get active screen
+    if(s == ui_ScreenTime) ScreenID = 1;  //ui_XXX is the handle of the home screen
     if(s == ui_ScreenCPU) ScreenID = 10;  //ui_XXX is the handle of the home screen
+    if(s == ui_ScreenCPUHist) ScreenID = 11;  //ui_XXX is the handle of the home screen
     if(s == ui_ScreenGPU) ScreenID = 20;  //ui_XXX is the handle of the home screen
 
     return ScreenID;
@@ -315,6 +325,8 @@ int active_screen(void)
 
 void cpu_screen(void)
 {
+  if (ENABLE_DEBUG_MAIN) Serial.printf("Escribo pantalla CPU \n"); 
+  
   lv_arc_set_value(ui_CPUArcTemp, int(datosCPU.Temperature));
   sprintf(bufftemp, "%3.1f", datosCPU.Temperature);
   _ui_label_set_property(ui_CPULabelTemp, 0, bufftemp);
@@ -344,6 +356,8 @@ void cpu_screen(void)
 
 void gpu_screen(void)
 {
+  if (ENABLE_DEBUG_MAIN) Serial.printf("Escribo pantalla GPU \n");
+
   lv_arc_set_value(ui_GPUArcTemp, int(datosGPU.Temperature));
   sprintf(bufftemp, "%3.1f", datosGPU.Temperature);
   _ui_label_set_property(ui_GPULabelTemp, 0, bufftemp);
@@ -364,4 +378,12 @@ void gpu_screen(void)
     lv_style_set_bg_color(&style_01, lv_color_hex(0xFF2F01));
   lv_obj_invalidate(ui_GPUPanelOjos1);
   lv_obj_invalidate(ui_GPUPanelBoca1);  
+}
+
+void time_screen(void)
+{
+  if (ENABLE_DEBUG_MAIN) Serial.printf("Escribo pantalla Time \n");
+
+  sprintf(bufftemp, "%s", datosTime.Ltime);
+  lv_label_set_text(ui_LabelTime, bufftemp);
 }

@@ -1,5 +1,7 @@
 SET(SOURCES screens/ui_ScreenCPU.c
     screens/ui_ScreenGPU.c
+    screens/ui_ScreenTime.c
+    screens/ui_ScreenCPUHist.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c

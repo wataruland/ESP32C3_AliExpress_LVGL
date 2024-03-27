@@ -56,6 +56,19 @@ extern lv_obj_t * ui_GPULabelVent1;
 extern lv_obj_t * ui_GPULabelLoad;
 extern lv_obj_t * ui_GPULabelLoadText;
 extern lv_obj_t * ui_GPUPanelTouch;
+// SCREEN: ui_ScreenTime
+void ui_ScreenTime_screen_init(void);
+void ui_event_ScreenTime(lv_event_t * e);
+extern lv_obj_t * ui_ScreenTime;
+extern lv_obj_t * ui_TimeImageFondo;
+extern lv_obj_t * ui_LabelTime;
+extern lv_obj_t * ui_LabelDate;
+// SCREEN: ui_ScreenCPUHist
+void ui_ScreenCPUHist_screen_init(void);
+void ui_event_ScreenCPUHist(lv_event_t * e);
+extern lv_obj_t * ui_ScreenCPUHist;
+extern lv_obj_t * ui_CPUHistImageFondo;
+extern lv_obj_t * ui_ChartCPU;
 extern lv_obj_t * ui____initial_actions0;
 
 
