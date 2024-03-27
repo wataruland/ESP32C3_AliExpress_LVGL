@@ -18,6 +18,10 @@ void my_disp_flush( lv_disp_drv_t *, const lv_area_t *, lv_color_t *);
 void my_touchpad_read( lv_indev_drv_t *, lv_indev_data_t *);
 void lecturaPuertoSerial(void);
 void estilos(void);
+int active_screen(void);
+void cpu_screen(void);
+void gpu_screen(void);
+
 
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[TFT_WIDTH * TFT_HEIGHT / 10 ];

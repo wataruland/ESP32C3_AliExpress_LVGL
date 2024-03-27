@@ -3,7 +3,7 @@ import time
 import os
 import serial
 
-connection = serial.Serial('COM3',115200) # <- Change this to match your COM port!
+connection = serial.Serial('COM6',115200) # <- Change this to match your COM port!
 
 CPU_List = [["Temperature", "CPU Package", 0.0, "C"],
             ["Fan",         "Fan #1",      0,   "RPM"],

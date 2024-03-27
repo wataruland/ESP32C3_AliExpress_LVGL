@@ -93,10 +93,14 @@ void setup()
   redWiFi.actualizarRTC(&datosTime);
 
   estilos();
-  lv_obj_add_style(ui_PanelOjos, &style_01, 0);
-  lv_obj_add_style(ui_PanelBoca, &style_01, 0);
-  lv_obj_invalidate(ui_PanelOjos);
-  lv_obj_invalidate(ui_PanelBoca);
+  lv_obj_add_style(ui_CPUPanelOjos, &style_01, 0);
+  lv_obj_add_style(ui_CPUPanelBoca, &style_01, 0);
+  lv_obj_invalidate(ui_CPUPanelOjos);
+  lv_obj_invalidate(ui_CPUPanelBoca);
+  lv_obj_add_style(ui_GPUPanelOjos1, &style_01, 0);
+  lv_obj_add_style(ui_GPUPanelBoca1, &style_01, 0);
+  lv_obj_invalidate(ui_GPUPanelOjos1);
+  lv_obj_invalidate(ui_GPUPanelBoca1);  
 
   previousMillisClock = millis();  
   previousMillisUpdateClock = millis();    
@@ -137,32 +141,20 @@ void loop()
 
   if (changedataSerial)
   {
-    lv_arc_set_value(ui_ArcTemp, int(datosCPU.Temperature));
-    sprintf(bufftemp, "%3.1f", datosCPU.Temperature);
-    _ui_label_set_property(ui_LabelTemp, 0, bufftemp);
+    int ScreenID = active_screen();
 
-    //500 - 1800
-    lv_arc_set_value(ui_ArcVent1, int(datosCPU.Fan1));
-    sprintf(bufftemp, "%4d", int(datosCPU.Fan1));
-    _ui_label_set_property(ui_LabelVent1, 0, bufftemp);
+    switch (ScreenID)
+    {
+      case 10: /* CPU Basic */
+        cpu_screen();
+        break;
+      case 20: /* GPU Basic */
+        gpu_screen();
+        break;        
+      default:
+        break;
+    }
 
-    //450 - 1850
-    lv_arc_set_value(ui_ArcVent2, int(datosCPU.Fan2));
-    sprintf(bufftemp, "%4d", int(datosCPU.Fan2));
-    _ui_label_set_property(ui_LabelVent2, 0, bufftemp);
-
-    sprintf(bufftemp, "%3.1f", datosCPU.Load);
-    lv_label_set_text(ui_LabelCPULoad, bufftemp);
-  
-    if (int(datosCPU.Load) <= 30)
-      lv_style_set_bg_color(&style_01, lv_color_hex(0x00DFFF));
-    if (int(datosCPU.Load) > 30 && int(datosCPU.Load) < 70)
-      lv_style_set_bg_color(&style_01, lv_color_hex(0x01FF28));
-    if (int(datosCPU.Load) >= 70)
-      lv_style_set_bg_color(&style_01, lv_color_hex(0xFF2F01));
-    lv_obj_invalidate(ui_PanelOjos);
-    lv_obj_invalidate(ui_PanelBoca);
-  
     changedataSerial = false;    
   }
 
@@ -298,4 +290,78 @@ void estilos(void)
     lv_style_init(&style_01);
     lv_style_set_bg_color(&style_01, lv_color_hex(0x0000FF));
     lv_style_set_bg_opa(&style_01, LV_OPA_100);
+}
+
+int active_screen(void)
+{
+    /*
+    -1 - Error
+    00 - Pantalla Hora - Dia - Weather
+    01 - Pantalla Weather
+    02 - Pantalla News
+    10 - Pantalla CPU Basica
+    11 - Pantalla CPU Grafica
+    20 - Pantalla GPU Basica
+    21 - Pantalla GPU Grafica
+    */
+    int ScreenID = -1;
+
+    lv_obj_t * s = lv_scr_act(); //get active screen
+    if(s == ui_ScreenCPU) ScreenID = 10;  //ui_XXX is the handle of the home screen
+    if(s == ui_ScreenGPU) ScreenID = 20;  //ui_XXX is the handle of the home screen
+
+    return ScreenID;
+}
+
+void cpu_screen(void)
+{
+  lv_arc_set_value(ui_CPUArcTemp, int(datosCPU.Temperature));
+  sprintf(bufftemp, "%3.1f", datosCPU.Temperature);
+  _ui_label_set_property(ui_CPULabelTemp, 0, bufftemp);
+
+  //500 - 1800
+  lv_arc_set_value(ui_CPUArcVent1, int(datosCPU.Fan1));
+  sprintf(bufftemp, "%4d", int(datosCPU.Fan1));
+  _ui_label_set_property(ui_CPULabelVent1, 0, bufftemp);
+
+  //450 - 1850
+  lv_arc_set_value(ui_CPUArcVent2, int(datosCPU.Fan2));
+  sprintf(bufftemp, "%4d", int(datosCPU.Fan2));
+  _ui_label_set_property(ui_CPULabelVent2, 0, bufftemp);
+
+  sprintf(bufftemp, "%3.1f", datosCPU.Load);
+  lv_label_set_text(ui_CPULabelLoad, bufftemp);
+  
+  if (int(datosCPU.Load) <= 30)
+    lv_style_set_bg_color(&style_01, lv_color_hex(0x00DFFF));
+  if (int(datosCPU.Load) > 30 && int(datosCPU.Load) < 70)
+    lv_style_set_bg_color(&style_01, lv_color_hex(0x01FF28));
+  if (int(datosCPU.Load) >= 70)
+    lv_style_set_bg_color(&style_01, lv_color_hex(0xFF2F01));
+  lv_obj_invalidate(ui_CPUPanelOjos);
+  lv_obj_invalidate(ui_CPUPanelBoca);  
+}
+
+void gpu_screen(void)
+{
+  lv_arc_set_value(ui_GPUArcTemp, int(datosGPU.Temperature));
+  sprintf(bufftemp, "%3.1f", datosGPU.Temperature);
+  _ui_label_set_property(ui_GPULabelTemp, 0, bufftemp);
+
+  //500 - 1800
+  lv_arc_set_value(ui_GPUArcVent1, int(datosGPU.Fan1));
+  sprintf(bufftemp, "%4d", int(datosGPU.Fan1));
+  _ui_label_set_property(ui_GPULabelVent1, 0, bufftemp);
+
+  sprintf(bufftemp, "%3.1f", datosGPU.Load);
+  lv_label_set_text(ui_GPULabelLoad, bufftemp);
+  
+  if (int(datosGPU.Load) <= 30)
+    lv_style_set_bg_color(&style_01, lv_color_hex(0x00DFFF));
+  if (int(datosGPU.Load) > 30 && int(datosGPU.Load) < 70)
+    lv_style_set_bg_color(&style_01, lv_color_hex(0x01FF28));
+  if (int(datosGPU.Load) >= 70)
+    lv_style_set_bg_color(&style_01, lv_color_hex(0xFF2F01));
+  lv_obj_invalidate(ui_GPUPanelOjos1);
+  lv_obj_invalidate(ui_GPUPanelBoca1);  
 }
